@@ -37,6 +37,7 @@ import DashMonitor from './monitor';
 import DashPhoton from './photon';
 import DashProtect from './protect';
 import DashScan from './scan';
+import DashFirewall from './scan-firewall';
 import DashSearch from './search';
 import DashSecurityBundle from './security-bundle';
 import DashStats from './stats/index.jsx';
@@ -113,6 +114,8 @@ class AtAGlance extends Component {
 		if ( 'inactive' !== this.props.getModuleOverride( 'monitor' ) ) {
 			securityCards.push( <DashMonitor { ...settingsProps } /> );
 		}
+
+		securityCards.push( <DashFirewall { ...settingsProps } /> );
 
 		// Maybe add the rewind card
 		'active' === rewindStatus &&
