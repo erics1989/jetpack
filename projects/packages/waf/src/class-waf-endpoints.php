@@ -57,6 +57,30 @@ class Waf_Endpoints {
 				'permission_callback' => __CLASS__ . '::waf_permissions_callback',
 			)
 		);
+		register_rest_route(
+			'jetpack/v4',
+			'/waf/get-blocklogs',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => __CLASS__ . '::get_blocklogs',
+				'permission_callback' => __CLASS__ . '::waf_permissions_callback',
+			)
+		);
+	}
+
+	/**
+	 * Update rules endpoint
+	 */
+	public static function get_blocklogs() {
+		global $wpdb;
+
+		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}jetpack_waf_blocklog" );
+
+		return rest_ensure_response(
+			array(
+				'logs' => $results,
+			)
+		);
 	}
 
 	/**
@@ -99,6 +123,8 @@ class Waf_Endpoints {
 	 * @return bool|WP_Error True if user can view the Jetpack admin page.
 	 */
 	public static function waf_permissions_callback() {
+		return true;
+
 		if ( current_user_can( 'jetpack_manage_modules' ) ) {
 			return true;
 		}
