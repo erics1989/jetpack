@@ -123,8 +123,6 @@ class Waf_Endpoints {
 	 * @return bool|WP_Error True if user can view the Jetpack admin page.
 	 */
 	public static function waf_permissions_callback() {
-		return true;
-
 		if ( current_user_can( 'jetpack_manage_modules' ) ) {
 			return true;
 		}
