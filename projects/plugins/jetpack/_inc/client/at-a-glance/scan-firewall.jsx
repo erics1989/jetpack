@@ -33,6 +33,8 @@ import { isAtomicSite, showBackups } from 'state/initial-state';
 import { getScanStatus, isFetchingScanStatus } from 'state/scan';
 import { getSitePlan, isFetchingSiteData } from 'state/site';
 import { isPluginInstalled } from 'state/site/plugins';
+import QueryWafStats from '../components/data/query-waf-stats';
+import { getWafStats, isFetchingWafStats } from '../state/waf/reducer';
 
 /**
  * Displays a card for Security Scan based on the props given.
@@ -504,6 +506,7 @@ function barClick() {}
  * @param props
  */
 function DashFirewall( props ) {
+	console.log( props.wafStats );
 	const content = (
 		<div className="jp-at-a-glance__stats-container">
 			<div className="jp-at-a-glance__stats-chart">
@@ -514,16 +517,19 @@ function DashFirewall( props ) {
 	);
 
 	return (
-		<div className="jp-dash-item">
-			<DashItem
-				label={ __( 'Firewall', 'jetpack' ) }
-				module={ 'firewall' }
-				className={ props.className || '' }
-				status={ props.status || '' }
-				pro={ true }
-				overrideContent={ content }
-			/>
-		</div>
+		<>
+			<div className="jp-dash-item">
+				<DashItem
+					label={ __( 'Firewall', 'jetpack' ) }
+					module={ 'firewall' }
+					className={ props.className || '' }
+					status={ props.status || '' }
+					pro={ true }
+					overrideContent={ content }
+				/>
+			</div>
+			<QueryWafStats />
+		</>
 	);
 }
 
@@ -541,11 +547,13 @@ export default connect(
 			vaultPressData: getVaultPressData( state ),
 			scanThreats: getVaultPressScanThreatCount( state ),
 			fetchingSiteData: isFetchingSiteData( state ),
+			fetchingWafStats: isFetchingWafStats( state ),
 			sitePlan,
 			planClass: getPlanClass( get( sitePlan, 'product_slug', '' ) ),
 			showBackups: showBackups( state ),
 			upgradeUrl: getProductDescriptionUrl( state, 'scan' ),
 			hasConnectedOwner: hasConnectedOwnerSelector( state ),
+			wafStats: getWafStats( state ),
 		};
 	},
 	dispatch => ( {
