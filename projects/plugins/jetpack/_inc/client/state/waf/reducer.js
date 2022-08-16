@@ -4,6 +4,9 @@ import {
 	WAF_SETTINGS_FETCH,
 	WAF_SETTINGS_FETCH_RECEIVE,
 	WAF_SETTINGS_FETCH_FAIL,
+	WAF_STATS_FETCH,
+	WAF_STATS_FETCH_RECEIVE,
+	WAF_STATS_FETCH_FAIL,
 } from 'state/action-types';
 
 export const data = ( state = {}, action ) => {
@@ -13,6 +16,10 @@ export const data = ( state = {}, action ) => {
 				bootstrapPath: action.settings?.bootstrapPath,
 				hasRulesAccess: action.settings?.hasRulesAccess,
 			} );
+		case WAF_STATS_FETCH_RECEIVE:
+			return assign( {}, state, {
+				stats: action.stats,
+			} );
 		default:
 			return state;
 	}
@@ -20,6 +27,7 @@ export const data = ( state = {}, action ) => {
 
 export const initialRequestsState = {
 	isFetchingWafSettings: false,
+	isFetchingWafStats: false,
 };
 
 export const requests = ( state = initialRequestsState, action ) => {
@@ -32,6 +40,15 @@ export const requests = ( state = initialRequestsState, action ) => {
 		case WAF_SETTINGS_FETCH_FAIL:
 			return assign( {}, state, {
 				isFetchingWafSettings: false,
+			} );
+		case WAF_STATS_FETCH:
+			return assign( {}, state, {
+				isFetchingWafStats: true,
+			} );
+		case WAF_STATS_FETCH_RECEIVE:
+		case WAF_STATS_FETCH_FAIL:
+			return assign( {}, state, {
+				isFetchingWafStats: false,
 			} );
 		default:
 			return state;
@@ -54,6 +71,16 @@ export function isFetchingWafSettings( state ) {
 }
 
 /**
+ * Returns true if currently requesting the firewall statistics. Otherwise false.
+ *
+ * @param  {object}  state - Global state tree
+ * @returns {boolean}      Whether the bootstrap path is being requested
+ */
+export function isFetchingWafStats( state ) {
+	return !! state.jetpack.waf.requests.isFetchingWafStats;
+}
+
+/**
  * Returns the firewall's bootstrap.php file path.
  *
  * @param  {object}  state - Global state tree
@@ -71,4 +98,14 @@ export function getWafBootstrapPath( state ) {
  */
 export function getWafHasRulesAccess( state ) {
 	return get( state.jetpack.waf, [ 'data', 'hasRulesAccess' ], false );
+}
+
+/**
+ * Returns the firewall statistics.
+ *
+ * @param {object}  state - Global state tree
+ * @returns {object}  Firewall statistics
+ */
+export function getWafStats( state ) {
+	return get( state.jetpack.waf, [ 'data', 'stats' ], false );
 }

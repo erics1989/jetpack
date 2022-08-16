@@ -59,7 +59,7 @@ class Waf_Endpoints {
 		);
 		register_rest_route(
 			'jetpack/v4',
-			'/waf/get-blocklogs',
+			'/waf/stats',
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => __CLASS__ . '::get_blocklogs',
