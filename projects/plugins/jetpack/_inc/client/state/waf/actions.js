@@ -38,12 +38,12 @@ export const fetchWafStats = () => {
 		} );
 		return restApi
 			.fetchWafStats()
-			.then( settings => {
+			.then( stats => {
 				dispatch( {
 					type: WAF_STATS_FETCH_RECEIVE,
-					settings,
+					stats,
 				} );
-				return settings;
+				return stats;
 			} )
 			.catch( error => {
 				dispatch( {
