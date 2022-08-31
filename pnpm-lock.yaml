@@ -356,6 +356,7 @@ importers:
 
   projects/js-packages/licensing:
     specifiers:
+      '@automattic/jetpack-analytics': workspace:* || ^0.1
       '@automattic/jetpack-api': workspace:* || ^0.13
       '@automattic/jetpack-base-styles': workspace:* || ^0.3
       '@automattic/jetpack-components': workspace:* || ^0.18
@@ -375,6 +376,7 @@ importers:
       react-dom: 17.0.2
       react-test-renderer: 17.0.2
     dependencies:
+      '@automattic/jetpack-analytics': link:../analytics
       '@automattic/jetpack-api': link:../api
       '@automattic/jetpack-components': link:../components
       '@wordpress/components': 20.0.0_q6el6r4hbd2fftzckrwpdnyobi
