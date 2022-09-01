@@ -1938,7 +1938,7 @@ importers:
 
   tools/e2e-commons:
     specifiers:
-      '@playwright/test': 1.25.0
+      '@playwright/test': 1.25.1
       '@slack/web-api': 6.7.2
       allure-playwright: 2.0.0-beta.19
       axios: 0.27.2
@@ -1952,7 +1952,7 @@ importers:
       winston: 3.8.1
       yargs: 17.5.1
     devDependencies:
-      '@playwright/test': 1.25.0
+      '@playwright/test': 1.25.1
       '@slack/web-api': 6.7.2
       allure-playwright: 2.0.0-beta.19
       axios: 0.27.2
@@ -5242,6 +5242,15 @@ packages:
     dependencies:
       '@types/node': 18.0.3
       playwright-core: 1.25.0
+    dev: true
+
+  /@playwright/test/1.25.1:
+    resolution: {integrity: sha512-IJ4X0yOakXtwkhbnNzKkaIgXe6df7u3H3FnuhI9Jqh+CdO0e/lYQlDLYiyI9cnXK8E7UAppAWP+VqAv6VX7HQg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.0.3
+      playwright-core: 1.25.1
     dev: true
 
   /@pm2/agent/2.0.1:
@@ -17720,6 +17729,12 @@ packages:
 
   /playwright-core/1.25.0:
     resolution: {integrity: sha512-kZ3Jwaf3wlu0GgU0nB8UMQ+mXFTqBIFz9h1svTlNduNKjnbPXFxw7mJanLVjqxHJRn62uBfmgBj93YHidk2N5Q==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
+  /playwright-core/1.25.1:
+    resolution: {integrity: sha512-lSvPCmA2n7LawD2Hw7gSCLScZ+vYRkhU8xH0AapMyzwN+ojoDqhkH/KIEUxwNu2PjPoE/fcE0wLAksdOhJ2O5g==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
