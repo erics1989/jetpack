@@ -197,9 +197,10 @@ class Jetpack_Social {
 	 * @returns boolean True if the site has a plan that supports a higher share limit.
 	 */
 	public function has_paid_plan() {
-		static $refresh_plan_from_wpcom = true;
-		$has_plan                       = Current_Plan::supports( 'social-shares-1000', $refresh_plan_from_wpcom );
-		$refresh_plan_from_wpcom        = false;
+		static $has_plan = null;
+		if ( null === $has_plan ) {
+			$has_plan = Current_Plan::supports( 'social-shares-1000', true );
+		}
 		return $has_plan;
 	}
 
