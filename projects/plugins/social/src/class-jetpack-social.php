@@ -117,7 +117,7 @@ class Jetpack_Social {
 	 */
 	public function enqueue_admin_scripts() {
 		$screen = get_current_screen();
-		if ( ! empty( $screen ) && $screen->is_block_editor() ) {
+		if ( ! empty( $screen ) && 'jetpack_page_jetpack-social' !== $screen->base ) {
 			return;
 		}
 
