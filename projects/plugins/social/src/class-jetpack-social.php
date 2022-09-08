@@ -14,6 +14,7 @@ use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Connection\Initial_State as Connection_Initial_State;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Rest_Authentication as Connection_Rest_Authentication;
+use Automattic\Jetpack\Current_Plan;
 use Automattic\Jetpack\Modules;
 use Automattic\Jetpack\My_Jetpack\Initializer as My_Jetpack_Initializer;
 use Automattic\Jetpack\Status;
@@ -49,6 +50,7 @@ class Jetpack_Social {
 			array( $this, 'plugin_settings_page' ),
 			99
 		);
+
 		add_action( 'load-' . $page_suffix, array( $this, 'admin_init' ) );
 
 		// Init Jetpack packages and ConnectionUI.
@@ -79,6 +81,7 @@ class Jetpack_Social {
 
 		// Activate the module as the plugin is activated
 		add_action( 'admin_init', array( $this, 'do_plugin_activation_activities' ) );
+
 		add_action(
 			'plugins_loaded',
 			function () {
@@ -98,6 +101,8 @@ class Jetpack_Social {
 		add_action( 'wp_head', array( new Automattic\Jetpack\Social\Meta_Tags(), 'render_tags' ) );
 
 		add_filter( 'jetpack_get_available_standalone_modules', array( $this, 'social_filter_available_modules' ), 10, 1 );
+
+		add_action( 'admin_init', array( $this, 'set_up_sharing_limits' ) );
 	}
 
 	/**
@@ -145,7 +150,9 @@ class Jetpack_Social {
 	public function initial_state() {
 		global $publicize;
 
-		$shares = $publicize->get_publicize_shares_info( Jetpack_Options::get_option( 'id' ) );
+		$shares                  = $publicize->get_publicize_shares_info( Jetpack_Options::get_option( 'id' ) );
+		$refresh_plan_from_wpcom = true;
+		$show_nudge              = ! Current_Plan::supports( 'social-shares-1000', $refresh_plan_from_wpcom );
 
 		return array(
 			'siteData'        => array(
@@ -161,6 +168,7 @@ class Jetpack_Social {
 				'adminUrl'    => esc_url_raw( $publicize->publicize_connections_url( 'jetpack-social-connections-admin-page' ) ),
 			),
 			'sharesData'      => ! is_wp_error( $shares ) ? $shares : null,
+			'showNudge'       => $show_nudge,
 		);
 	}
 
@@ -197,6 +205,8 @@ class Jetpack_Social {
 		);
 
 		Assets::enqueue_script( 'jetpack-social-editor' );
+
+		wp_add_inline_script( 'jetpack-social-editor', $this->render_initial_state(), 'before' );
 
 		wp_localize_script(
 			'jetpack-social-editor',
@@ -273,5 +283,28 @@ class Jetpack_Social {
 	 */
 	public function social_filter_available_modules( $modules ) {
 		return array_merge( array( self::JETPACK_PUBLICIZE_MODULE_SLUG ), $modules );
+	}
+
+	/**
+	 * Set up sharing limits.
+	 */
+	public function set_up_sharing_limits() {
+		global $publicize;
+
+		$info = $publicize->get_publicize_shares_info( \Jetpack_Options::get_option( 'id' ) );
+
+		if ( is_wp_error( $info ) ) {
+			return;
+		}
+
+		if ( empty( $info['is_share_limit_enabled'] ) ) {
+			return;
+		}
+
+		$connections      = $publicize->get_all_connections();
+		$shares_remaining = $info['shares_remaining'];
+
+		$share_limits = new Automattic\Jetpack\Social\Share_Limits( $connections, $shares_remaining );
+		$share_limits->enforce_share_limits();
 	}
 }
