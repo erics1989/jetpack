@@ -66,6 +66,7 @@ const ConnectedPricingTable = ( { onAdd, onAddError } ) => {
 							offPrice={ 4.98 }
 							leyend={ __( '/month, billed yearly', 'jetpack-protect' ) }
 							currency="USD"
+							hideSavingLabel={ false }
 						/>
 						<Button fullWidth>{ __( 'Get Jetpack Protect', 'jetpack-protect' ) }</Button>
 					</PricingTableHeader>

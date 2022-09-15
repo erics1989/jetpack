@@ -19,7 +19,7 @@ const ProductPrice: React.FC< ProductPriceProps > = ( {
 	leyend = __( '/month, paid yearly', 'jetpack' ),
 	isNotConvenientPrice = false,
 	hidePriceFraction = false,
-	hideSavingLabel = false,
+	hideSavingLabel = true,
 } ) => {
 	if ( ( price == null && offPrice == null ) || ! currency ) {
 		return null;
